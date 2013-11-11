@@ -1,0 +1,54 @@
+#!/bin/bash
+
+### CRONTAB BACKUP MANAGER ###
+#
+#It will let you migrate users' crontab using crontab and some input/output redirections :)
+#
+
+dir_name=crontabz;
+
+function backup_crontab{
+    mkdir $dirname; 
+    for user in `cat /etc/cron.allow`
+      do crontab -l -u $user > $dirname/cron_$user; 
+    done
+    tar -cvzf backup.tgz $dirname; 
+    exit 0;
+}
+
+#Now you should move backup.tgz where needed, then restore
+
+function restore_crontab{
+  tar xfv backup.tgz; 
+  cd $dirname;
+  for file in `ls -m1`
+    do echo `basename $file` | sed -s 's/\([a-z]\)*_//' >> temp ; 
+  done ;  
+  for user in `cat temp` 
+    do  cat cron_$user | crontab -u $user - ; 
+  done;
+  rm -f temp;
+  exit 0;
+}
+
+function usage{
+  echo "Usage: basename $0 { backup | restore }"
+}
+
+if [ $# -ne 1 ]
+  then
+      usage;
+      exit 1;
+  else
+      case $1 in
+        backup)
+          backup_crontab;
+          ;;
+        restore)
+          restore_crontab;
+          ;;
+        *)
+          usage;
+          exit 1;
+      esac
+fi
