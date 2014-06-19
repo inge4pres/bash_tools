@@ -1,1 +1,1 @@
-start=$(date +%s); count=0; while [[ count -lt 12000 ]]; do mkdir ./$count; dd if=/dev/urandom of=./$count/${count}_test.dat bs=4096 count=1; dd if=/dev/urandom of=./$count/${count}_test.metadata bs=500 count=1; let count=$count+1; done; end=$(date +%s); echo $start-$end|bc
+start=$(date +%s); count=0; while [[ count -lt 12000 ]]; do mkdir ./$count; dd if=/dev/urandom of=./$count/${count}_test.dat bs=4096 count=1; dd if=/dev/urandom of=./$count/${count}_test.metadata bs=500 count=1; let count=$count+1; done; end=$(date +%s); echo "EXEC TIME SEC:"; echo $end-$start|bc 
