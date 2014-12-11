@@ -1,0 +1,12 @@
+#!/bin/bash
+#Receive a Happy message at your servers' uptime birthday!
+#Requires mail installed on the system
+#Modify mail recipient and "ln -s this_script_path /etc/cron.daily/happ_bday_server"
+days=$(uptime | cut -f 4 -d " "); 
+let "y=($days*4+1)/1461";
+rec=admin@server.tld
+if [[ $y -gt 0 ]]
+  then
+    echo "Today is $y year(s) since my last boot. Here's my hardware info $(lspci)" | mail -s "Happy birthday $HOSTNAME" $rec   
+fi
+exit 0
