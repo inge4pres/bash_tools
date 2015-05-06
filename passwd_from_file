@@ -1,0 +1,5 @@
+# If you have a USER;PASSWORD CSV name pwd_update_file (with ; as delimiter), you can change every user password with this
+
+for line in `cat pwd_update_file`; do user=$(echo $line | cut -f 1 -d ";"); \
+  pwd=$(echo $line | cut -f 2 -d ";"); \
+  echo $pwd | passwd --stdin $user ; done
