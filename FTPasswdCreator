@@ -1,0 +1,4 @@
+#!/bin/bash
+# Have a /root/ftp_temp file with username:password (delimited with ":").
+# This 1 liner will scan /etc/passwd, find username, home, uid, gid , shell and will generate the correspondign ftpasswd entry in --file parameter
+for line in $(cat /etc/passwd); do uhome=$(echo $line | cut -d ":" -f6); ushell=$(echo $line | cut -d ":" -f7); uuid=$(echo $line | cut -d ":" -f3); ugid=$(echo $line | cut -d ":" -f4); uname=$(echo $line | cut -d ":" -f1); if [[ -n $(grep "$uname\:" /root/ftp_temp) ]]; then ftpline=$(grep "$uname\:" /root/ftp_temp); upwd=$(echo $ftpline | cut -d ":" -f2); echo "$upwd" | ftpasswd --passwd --file /etc/proftpd.passwd --name "$uname" --home $uhome --shell $ushell --uid $uuid --gid $ugid --stdin; fi; done
